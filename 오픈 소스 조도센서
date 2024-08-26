@@ -1,0 +1,37 @@
+import RPi.GPIO as GPIO
+import time
+
+#GPIO 핀 설정
+CDS_PIN_1 = 17
+CDS_PIN_2 = 22
+LED_PIN = 18
+
+#GPIO 핀 모드 설정
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(CDS_PIN_1, GPIO.IN)
+GPIO.setup(CDS_PIN_2, GPIO.IN)
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+threshold = 0.0001
+
+def main():
+    try:
+        while True:
+            cds_value_1 = GPIO.input(CDS_PIN_1)
+            cds_value_2 = GPIO.input(CDS_PIN_2)
+
+            if cds_value_1 == GPIO.HIGH and cds_value_2 == GPIO.HIGH:
+                GPIO.output(LED_PIN, GPIO.HIGH)
+                print("LED 켜짐 - CDS1 값:", cds_value_1, "CDS2 값:", cds_value_2)
+            else:
+                GPIO.output(LED_PIN, GPIO.LOW)
+                print("LED 꺼짐 - CDS1 값:", cds_value_1, "CDS2 값:", cds_value_2)
+
+    except KeyboardInterrupt:
+        pass
+    finally:
+        GPIO.cleanup()
+        print("프로그램 종료, GPIO 정리 완료")
+
+if __name__ == "__main__":
+    main()
